@@ -14,22 +14,25 @@ Furthermore, because raw uncertainty scores are often unbounded or uninterpretab
 
 ## 📁 Repository Structure
 
-UQ-Text-Mining/
+Whitebox-UQ/
 │
-├── notebooks/
-│   └── uq_1008.ipynb             # Main tutorial notebook (Multimodal UQ & Normalization)
+├── Whitebox_UQ.ipynb             # Main tutorial notebook
 │
-└── notebooks/uq_toolbox/         # Internal infrastructure utility
+└── uq_toolbox/                   # Internal infrastructure utility
     ├── __init__.py
     ├── registry.py               # UQ technique registry
     ├── core/
     │   ├── pipeline.py           # Dataset-level and batch scoring pipelines
     │   ├── uq_engine.py          # Central routing engine (UQLM ↔ LM-Polygraph)
-    │   └── response_evaluator.py # Substring match and correctness evaluators
+    │   ├── density_uq.py         # RDE reference-fitting workflow
+    │   ├── claim_uq.py           # Claim-level pipeline (generate → extract → NLI → score)
+    │   └── response_evaluator.py # Correctness evaluators
     ├── managers/
-    │   └── model_manager.py      # Model loading, aliasing, white/black-box modes
-    └── data/
-        └── data_loader.py        # Dataset ingestion and preprocessing (e.g., VQA-RAD)
+    │   ├── model_manager.py      # Model loading, aliasing, white/black-box modes
+    │   └── llama_cpp_manager.py  # llama.cpp backend support
+    └── learned_uq/
+        ├── engine.py             # Token/sequence-level supervised UQ inference
+        └── manager.py            # Mistral + uncertainty head loader
 
 ---
 
