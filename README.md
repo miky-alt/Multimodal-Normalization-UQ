@@ -1,6 +1,6 @@
 # 🤖 Multimodal Uncertainty Quantification and Score Normalization for Vision-Language Models: A Comprehensive Tutorial
 
-A hands-on tutorial notebook covering multimodal uncertainty quantification (UQ), score normalization, and post-hoc calibration for Vision-Language Models (VLMs), using **UQLM** and **LM-Polygraph** unified through a lightweight internal utility called `uq_toolbox`.
+A hands-on tutorial notebook covering multimodal uncertainty quantification (UQ), score normalization, and alibration for Vision-Language Models (VLMs), using **UQLM** and **LM-Polygraph** unified through a lightweight internal utility called `uq_toolbox`.
 
 ## 📋 Overview
 
