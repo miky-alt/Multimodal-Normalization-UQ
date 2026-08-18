@@ -8,11 +8,7 @@ Vision-Language Models can generate fluent, confident-sounding answers even when
 
 Furthermore, because raw uncertainty scores are often unbounded or uninterpretable, this repository guides you through a complete **score normalization and calibration pipeline** to translate those metrics into reliable probabilities for effective hallucination detection.
 
-**Score direction awareness:**
-* **UQLM** reports confidence — higher = more reliable, range $[0, 1]$.
-* **LM-Polygraph** generally reports uncertainty — higher = less reliable, estimator-specific scale.
 
-Always check the direction before interpreting or comparing values across libraries.
 
 ---
 
