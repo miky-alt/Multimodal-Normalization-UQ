@@ -14,29 +14,26 @@ Furthermore, because raw uncertainty scores are often unbounded or uninterpretab
 
 ## 📁 Repository Structure
 
-Whitebox-UQ/
+```
+Multimodal-Normalization-UQ/
 │
-├── Whitebox_UQ.ipynb             # Main tutorial notebook
+├── uq_mult_norm.ipynb             # Main tutorial notebook (Multimodal UQ & Normalization)
 │
-└── uq_toolbox/                   # Internal infrastructure utility
+└── uq_toolbox/                    # Internal infrastructure utility
     ├── __init__.py
-    ├── registry.py               # UQ technique registry
+    ├── registry.py                # UQ technique registry
     ├── core/
-    │   ├── pipeline.py           # Dataset-level and batch scoring pipelines
-    │   ├── uq_engine.py          # Central routing engine (UQLM ↔ LM-Polygraph)
-    │   ├── density_uq.py         # RDE reference-fitting workflow
-    │   ├── claim_uq.py           # Claim-level pipeline (generate → extract → NLI → score)
-    │   └── response_evaluator.py # Correctness evaluators
+    │   ├── pipeline.py            # Dataset-level and batch scoring pipelines
+    │   ├── uq_engine.py           # Central routing engine (UQLM ↔ LM-Polygraph)
+    │   └── response_evaluator.py  # Substring match and correctness evaluators
     ├── managers/
-    │   ├── model_manager.py      # Model loading, aliasing, white/black-box modes
-    │   └── llama_cpp_manager.py  # llama.cpp backend support
-    └── learned_uq/
-        ├── engine.py             # Token/sequence-level supervised UQ inference
-        └── manager.py            # Mistral + uncertainty head loader
-
+    │   └── model_manager.py       # Model loading, aliasing, white/black-box modes
+    └── data/
+        └── data_loader.py         # Dataset ingestion and preprocessing.
+```
 ---
 
-## 🗂️ Tutorial Structure (`uq_1008.ipynb`)
+## 🗂️ Tutorial Structure (`uq_mult_norm.ipynb`)
 
 | Section | Content |
 | :--- | :--- |
@@ -51,56 +48,41 @@ Whitebox-UQ/
 
 ### 1. Multimodal Uncertainty Quantification Paradigms
 * **Sample Diversity (Black-Box & White-Box):** `NumSemSets`, `DegMat`, `Eccentricity`, `SemanticEntropy`, `EigenScore`, `NonContradiction`, `SemanticSetsConfidence`, `BlackSemanticNegentropy`, `MonteCarloProbability`, `ConsistencyAndConfidence (CoCoA)`.
-* **Information-Based (Probability & Attention-based):** `LabelProb`, `MaximumSequenceProbability`, `MeanTokenEntropy`, `TokenEntropy`, `MaximumTokenProbability`, `Attention Score`, `SequenceProbability`, `ProbabilityMargin`, `MeanTokenNegentropy`[cite: 2].
-* **Ensemble:** `GeneralizedEnsemble` (Optuna-optimized joint weight tuning via `uqlm`)[cite: 2].
-* **Reflexive:** `Linguistic1S`, `PTrue`, `Verbalized1S`[cite: 2].
+* **Information-Based (Probability & Attention-based):** `LabelProb`, `MaximumSequenceProbability`, `MeanTokenEntropy`, `TokenEntropy`, `MaximumTokenProbability`, `Attention Score`, `SequenceProbability`, `ProbabilityMargin`, `MeanTokenNegentropy`.
+* **Ensemble:** `GeneralizedEnsemble` 
+* **Reflexive:** `Linguistic1S`, `PTrue`, `Verbalized1S`.
 
 ### 2. Score Normalization & Calibration Pipeline
-* **Pure Normalization:** Linear Scaling (`MinMaxNormalizer`), Percentile Mapping (`QuantileNormalizer`)[cite: 2].
-* **Performance Calibration:** Platt Scaling (`PlattPCCNormalizer`), Binned PCC (`BinnedPCCNormalizer`), Isotonic PCC (`IsotonicPCCNormalizer`)[cite: 2].
+* **Pure Normalization:** Linear Scaling (`MinMaxNormalizer`), Percentile Mapping (`QuantileNormalizer`).
+* **Performance Calibration:** Platt Scaling (`PlattPCCNormalizer`), Binned PCC (`BinnedPCCNormalizer`), Isotonic PCC (`IsotonicPCCNormalizer`).
 
 ---
 
 ## 🧰 uq_toolbox
 
-`uq_toolbox` is a lightweight internal utility built for this tutorial to remove boilerplate infrastructure[cite: 2]. It handles:
-* loading and registering UQLM and LM-Polygraph models under simple aliases[cite: 2];
-* routing uncertainty calls to the correct framework backend[cite: 2];
-* standardizing VQA and multimodal dataset ingestion (e.g., VQA-RAD)[cite: 2];
-* wrapping Optuna-based joint ensemble weight tuning and threshold calibration[cite: 2].
+`uq_toolbox` is a lightweight internal utility built for this tutorial to remove boilerplate infrastructure. It handles:
+* loading and registering UQLM and LM-Polygraph models under simple aliases;
+* routing uncertainty calls to the correct framework backend;
+* standardizing  multimodal dataset ingestion.
 
 ---
 
 ## ⚙️ Requirements
 
 ### API Keys & Tokens
-* **OpenAI API key** — required for UQLM white-box/black-box scorers[cite: 2].
 * **Hugging Face token** — required to download vision-language models (e.g., LLaVA, SmolVLM) and auxiliary datasets[cite: 2].
 
 ### Hardware & Software
 * **GPU:** A CUDA-enabled GPU (NVIDIA T4 or better) is strongly recommended[cite: 2].
 * **Python:** Python 3.9+[cite: 2].
-* **Platform:** Google Colab (recommended) or a local Jupyter environment with GPU support[cite: 2].
+* **Platform:** Google Colab.
 
 ---
 
 ## 🚀 Getting Started
 
-### Option 1 — Google Colab (Recommended)
-1. Open `notebooks/uq_1008.ipynb` in Google Colab.
-2. Select **Runtime → Change runtime type → T4 GPU**[cite: 2].
-3. Run the installation and setup cells step-by-step following the in-notebook execution guidelines[cite: 2].
+1. Open `uq_mult_norm.ipynb` in Google Colab.
+2. Select **Runtime → Change runtime type → T4 GPU**.
+3. Run the installation and setup cells step-by-step following the in-notebook execution guidelines.
 
-### Option 2 — Local Environment
-```bash
-git clone [https://github.com/miky-alt/UQ-Text-Mining.git](https://github.com/miky-alt/UQ-Text-Mining.git)
-cd UQ-Text-Mining
 
-pip install "pip<24.1"
-pip install uqlm langchain-openai pandas plotly matplotlib \
-  transformers accelerate sentence-transformers datasets \
-  scikit-learn nltk ipywidgets
-pip install "git+[https://github.com/IINemo/lm-polygraph.git@dev](https://github.com/IINemo/lm-polygraph.git@dev)"
-pip install "git+[https://github.com/IINemo/llm-uncertainty-head.git](https://github.com/IINemo/llm-uncertainty-head.git)"
-pip install --force-reinstall "protobuf==5.28.3"
-pip install langchain-anthropic langchain-google-genai langchain-ollama
